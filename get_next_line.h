@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:01:22 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/10 20:10:43 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/10 21:33:07 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
-# include <libft.h>
+# include "libft.h"
 
 # define BUFF_SIZE 1024
 
