@@ -6,11 +6,15 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:01:18 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/12 19:55:56 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/13 17:46:20 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+# include <stdlib.h>
+# include <unistd.h>
+
+#include <stdio.h>
 
 int		gnl_build(int len, char **tmp, char **line, char **buff)
 {
@@ -49,14 +53,6 @@ int		gnl_read(int fd, char **line, char **tmp)
 	{
 		buff[len] = '\0';
 		ret = gnl_build(len, tmp, line, &buff);
-		if (*tmp && ret != 0)
-		{
-			if ((*tmp = ft_strjoin(*tmp, buff)) == NULL)
-				return (-1);
-		}
-		else if (ret != 0)
-			if ((*tmp = ft_strdup(buff)) == NULL)
-				return (-1);
 	}
 	if (len == -1)
 		return (-1);
@@ -73,8 +69,10 @@ int		get_next_line(int const fd, char **line)
 	tmp2 = NULL;
 	while (tmp && tmp[i] != '\0')
 	{
-		if (tmp[i] == '\n')
+		if (tmp[i] == '\n' || tmp[i+1] == '\0')
 		{
+			if (tmp[i+1] == '\0')
+				i++;
 			if ((*line = ft_strsub(tmp, 0, i)) == NULL)
 				return (-1);
 			if ((tmp2 = ft_strsub(tmp, i + 1, ft_strlen(tmp) - i)) == NULL)
