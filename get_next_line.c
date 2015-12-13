@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:01:18 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/13 17:46:20 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/13 19:12:53 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int		get_next_line(int const fd, char **line)
 		{
 			if (tmp[i+1] == '\0')
 				i++;
+			if (tmp[i - 1] == '\n')
+				i--;
 			if ((*line = ft_strsub(tmp, 0, i)) == NULL)
 				return (-1);
 			if ((tmp2 = ft_strsub(tmp, i + 1, ft_strlen(tmp) - i)) == NULL)
