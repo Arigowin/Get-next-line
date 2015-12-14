@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 13:34:30 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/14 13:35:36 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/14 13:56:32 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void		gnl_cond_read(char **tmp, char **buff)
 		*tmp = ft_strjoin(*tmp, *buff);
 }
 
-static int		gnl_read(int fd, char **line, char ***buff_tmp, int j)
+static int		gnl_read(int fd, char **line, t_buff *buff_tmp)
 {
 	char			*buff;
 	int				len;
@@ -40,9 +40,9 @@ static int		gnl_read(int fd, char **line, char ***buff_tmp, int j)
 	}
 	if (tmp != NULL)
 	{
-		if ((*buff_tmp = ft_strsplit(tmp, '\n')) == NULL)
+		if (((*buff_tmp).buff_t = ft_strsplit(tmp, '\n')) == NULL)
 			return (-1);
-		if ((*line = ft_strdup((*buff_tmp)[j])) != NULL)
+		if ((*line = ft_strdup((*buff_tmp).buff_t[(*buff_tmp).j])) != NULL)
 			return (1);
 	}
 	if (len == -1)
@@ -52,19 +52,18 @@ static int		gnl_read(int fd, char **line, char ***buff_tmp, int j)
 
 int				get_next_line(const int fd, char **line)
 {
-	static char		**buff_tmp = NULL;
-	static int		j = 0;
+	static t_buff		buff_tmp;
 
-	if (buff_tmp != NULL)
+	if (buff_tmp.buff_t != NULL)
 	{
-		j++;
-		if (buff_tmp[j] == NULL)
+		buff_tmp.j++;
+		if (buff_tmp.buff_t[buff_tmp.j] == NULL)
 			return (0);
-		*line = ft_strdup(buff_tmp[j]);
+		*line = ft_strdup(buff_tmp.buff_t[buff_tmp.j]);
 		if (*line != NULL)
 			return (1);
 		else
 			return (-1);
 	}
-	return (gnl_read(fd, line, &buff_tmp, j));
+	return (gnl_read(fd, line, &buff_tmp));
 }
