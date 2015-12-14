@@ -1,89 +1,70 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/10 15:01:18 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/13 19:12:53 by dolewski         ###   ########.fr       */
+/*   Created: 2015/12/14 13:34:30 by dolewski          #+#    #+#             */
+/*   Updated: 2015/12/14 13:35:36 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-# include <stdlib.h>
-# include <unistd.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-#include <stdio.h>
-
-int		gnl_build(int len, char **tmp, char **line, char **buff)
+static void		gnl_cond_read(char **tmp, char **buff)
 {
-	int i;
-
-	i = 0;
-	while (i <= len)
-	{
-		if (((*buff)[i] == '\n' || (*buff)[i] == '\0'))
-		{
-			if (*tmp != NULL)
-				*line = ft_strjoin(*tmp, ft_strsub((*buff), 0, i));
-			else
-				*line = ft_strsub((*buff), 0, i);
-			if ((*tmp = ft_strsub((*buff), i + 1, len - i)) == NULL)
-				return (-1);
-			if (*line != NULL && *tmp != NULL)
-				return (1);
-		}
-		i++;
-	}
-	return (0);
+	if (*tmp == NULL)
+		*tmp = ft_strdup(*buff);
+	else
+		*tmp = ft_strjoin(*tmp, *buff);
 }
 
-int		gnl_read(int fd, char **line, char **tmp)
+static int		gnl_read(int fd, char **line, char ***buff_tmp, int j)
 {
-	char	*buff;
-	int		len;
-	int		ret;
+	char			*buff;
+	int				len;
+	size_t			i;
+	char			*tmp;
 
-	len = 0;
-	ret = 0;
+	i = 0;
+	tmp = NULL;
 	if ((buff = ft_strnew(BUFF_SIZE)) == NULL)
 		return (-1);
 	while ((len = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[len] = '\0';
-		ret = gnl_build(len, tmp, line, &buff);
+		gnl_cond_read(&tmp, &buff);
+	}
+	if (tmp != NULL)
+	{
+		if ((*buff_tmp = ft_strsplit(tmp, '\n')) == NULL)
+			return (-1);
+		if ((*line = ft_strdup((*buff_tmp)[j])) != NULL)
+			return (1);
 	}
 	if (len == -1)
 		return (-1);
-	return (ret);
+	return (0);
 }
 
-int		get_next_line(int const fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
-	static char	*tmp = NULL;
-	int			i;
-	char		*tmp2;
+	static char		**buff_tmp = NULL;
+	static int		j = 0;
 
-	i = 0;
-	tmp2 = NULL;
-	while (tmp && tmp[i] != '\0')
+	if (buff_tmp != NULL)
 	{
-		if (tmp[i] == '\n' || tmp[i+1] == '\0')
-		{
-			if (tmp[i+1] == '\0')
-				i++;
-			if (tmp[i - 1] == '\n')
-				i--;
-			if ((*line = ft_strsub(tmp, 0, i)) == NULL)
-				return (-1);
-			if ((tmp2 = ft_strsub(tmp, i + 1, ft_strlen(tmp) - i)) == NULL)
-				return (-1);
-			if ((tmp = ft_strdup(tmp2)) == NULL)
-				return (-1);
+		j++;
+		if (buff_tmp[j] == NULL)
+			return (0);
+		*line = ft_strdup(buff_tmp[j]);
+		if (*line != NULL)
 			return (1);
-		}
-		i++;
+		else
+			return (-1);
 	}
-	return (gnl_read(fd, line, &tmp));
+	return (gnl_read(fd, line, &buff_tmp, j));
 }

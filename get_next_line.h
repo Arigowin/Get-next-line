@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:01:22 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/13 19:11:26 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/14 12:47:08 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@
 
 # define BUFF_SIZE 1
 
-int		get_next_line(int const fd, char **line);
+int		get_next_line(const int fd, char **line);
 
 #endif
