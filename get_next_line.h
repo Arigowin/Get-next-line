@@ -15,13 +15,7 @@
 
 # include "libft.h"
 
-# define BUFF_SIZE 1
-
-typedef struct		s_buff
-{
-	char			**buff_t;
-	int				j;
-}					t_buff;
+# define BUFF_SIZE 1024
 
 int					get_next_line(const int fd, char **line);
 
