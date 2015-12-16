@@ -24,13 +24,14 @@ int		gnl(char **tmp_buff, char **line)
 		i = 0;
 		while ((*tmp_buff)[i] && (*tmp_buff)[i] != '\n')
 			i++;
+		*line = NULL;
 		free(*line);
 		if (!(*line = ft_strsub((*tmp_buff), 0, i)))
 			return (-1);
 		if (!(sub = ft_strsub((*tmp_buff), i + 1, ft_strlen((*tmp_buff)) - i)))
 			return (-1);
 		free((*tmp_buff));
-		(*tmp_buff) = ft_strdup(sub);
+		*tmp_buff = ft_strdup(sub);
 		if ((*tmp_buff) != NULL)
 		{
 			if (sub[0] == '\0')
@@ -49,6 +50,7 @@ int		gnl_read(int fd, char **tmp_buff)
 {
 	int				len_buff;
 	char			*buff;
+	char			*tmp;
 
 	if (!(buff = ft_strnew(BUFF_SIZE)))
 		return (-1);
@@ -57,13 +59,17 @@ int		gnl_read(int fd, char **tmp_buff)
 	{
 		if ((*tmp_buff) == NULL)
 		{
+			free(*tmp_buff);
 			if (!((*tmp_buff) = ft_strdup(buff)))
 				return (-1);
 		}
 		else
 		{
-			if (!((*tmp_buff) = ft_strjoin((*tmp_buff), buff)))
+			if (!(tmp = ft_strjoin((*tmp_buff), buff)))
 				return (-1);
+			free(*tmp_buff);
+			*tmp_buff = ft_strdup(tmp);
+			free(tmp);
 		}
 		free(buff);
 		if (!(buff = ft_strnew(BUFF_SIZE)))
@@ -91,5 +97,6 @@ int		get_next_line(int const fd, char **line)
 		return (-1);
 	else if (ret == 1)
 		return (1);
+	free(tmp_buff);
 	return (0);
 }
