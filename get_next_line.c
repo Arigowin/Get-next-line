@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/16 13:26:45 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/16 14:37:52 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int		gnl_read(int fd, char **tmp_buff)
 	ft_bzero(buff, BUFF_SIZE);
 	while ((len_buff = read(fd, buff, BUFF_SIZE)) > 0)
 	{
-			free(*tmp_buff);
 		if ((*tmp_buff) == NULL)
 		{
 			if (!((*tmp_buff) = ft_strdup(buff)))
