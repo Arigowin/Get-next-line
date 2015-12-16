@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/16 13:18:00 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/16 13:26:45 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int		gnl(char **tmp_buff, char **line)
 		i = 0;
 		while ((*tmp_buff)[i] && (*tmp_buff)[i] != '\n')
 			i++;
+		free(*line);
 		if (!(*line = ft_strsub((*tmp_buff), 0, i)))
 			return (-1);
 		if (!(sub = ft_strsub((*tmp_buff), i + 1, ft_strlen((*tmp_buff)) - i)))
@@ -33,7 +34,10 @@ int		gnl(char **tmp_buff, char **line)
 		if ((*tmp_buff) != NULL)
 		{
 			if (sub[0] == '\0')
+			{
 				(*tmp_buff) = NULL;
+				free(*tmp_buff);
+			}
 			free(sub);
 			return (1);
 		}
@@ -51,6 +55,7 @@ int		gnl_read(int fd, char **tmp_buff)
 	ft_bzero(buff, BUFF_SIZE);
 	while ((len_buff = read(fd, buff, BUFF_SIZE)) > 0)
 	{
+			free(*tmp_buff);
 		if ((*tmp_buff) == NULL)
 		{
 			if (!((*tmp_buff) = ft_strdup(buff)))
