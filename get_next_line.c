@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/17 16:13:16 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/17 16:20:15 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,21 +84,21 @@ int		gnl_read(int fd, char **tmp_buff)
 
 int		get_next_line(int const fd, char **line)
 {
-	static char		*tmp_buff;
+	static char		*tmp_buff[1024];
 	int				ret;
 
 	if (line == NULL)
 		return (-1);
-	if ((ret = gnl(&tmp_buff, line)) == -1)
+	if ((ret = gnl(&tmp_buff[fd], line)) == -1)
 		return (-1);
 	else if (ret == 1)
 		return (1);
-	if ((gnl_read(fd, &tmp_buff)) == -1)
+	if ((gnl_read(fd, &tmp_buff[fd])) == -1)
 		return (-1);
-	if ((ret = gnl(&tmp_buff, line)) == -1)
+	if ((ret = gnl(&tmp_buff[fd], line)) == -1)
 		return (-1);
 	else if (ret == 1)
 		return (1);
-	ft_strdel(&tmp_buff);
+	ft_strdel(&tmp_buff[fd]);
 	return (0);
 }
