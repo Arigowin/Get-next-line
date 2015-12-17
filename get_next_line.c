@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/17 13:32:29 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/17 16:13:16 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,12 @@ int		gnl(char **tmp_buff, char **line)
 			return (-1);
 		if (!(sub = ft_strsub((*tmp_buff), i + 1, ft_strlen((*tmp_buff)) - i)))
 			return (-1);
-		free((*tmp_buff));
+		ft_strdel(tmp_buff);
 		if ((*tmp_buff = ft_strdup(sub)) != NULL)
 		{
 			if (sub[0] == '\0')
-			{
-				free(*tmp_buff);
-				(*tmp_buff) = NULL;
-			}
-			free(sub);
+				ft_strdel(tmp_buff);
+			ft_strdel(&sub);
 			return (1);
 		}
 	}
@@ -47,11 +44,20 @@ int		gnl_for_norme(char **tmp_buff, char **buff)
 {
 	char			*tmp;
 
-	if (!(tmp = ft_strjoin((*tmp_buff), *buff)))
-		return (-1);
-	free(*tmp_buff);
-	*tmp_buff = ft_strdup(tmp);
-	free(tmp);
+	if ((*tmp_buff) == NULL)
+	{
+		ft_strdel(tmp_buff);
+		if (!((*tmp_buff) = ft_strdup(*buff)))
+			return (-1);
+	}
+	else
+	{
+		if (!(tmp = ft_strjoin((*tmp_buff), *buff)))
+			return (-1);
+		ft_strdel(tmp_buff);
+		*tmp_buff = ft_strdup(tmp);
+		ft_strdel(&tmp);
+	}
 	return (0);
 }
 
@@ -65,23 +71,14 @@ int		gnl_read(int fd, char **tmp_buff)
 	ft_bzero(buff, BUFF_SIZE);
 	while ((len_buff = read(fd, buff, BUFF_SIZE)) > 0)
 	{
-		if ((*tmp_buff) == NULL)
-		{
-			free(*tmp_buff);
-			if (!((*tmp_buff) = ft_strdup(buff)))
-				return (-1);
-		}
-		else
-		{
-			if (gnl_for_norme(tmp_buff, &buff) == -1)
-				return (-1);
-		}
-		free(buff);
+		if (gnl_for_norme(tmp_buff, &buff) == -1)
+			return (-1);
+		ft_strdel(&buff);
 		if (!(buff = ft_strnew(BUFF_SIZE)))
 			return (-1);
 		ft_bzero(buff, BUFF_SIZE);
 	}
-	free(buff);
+	ft_strdel(&buff);
 	return (len_buff);
 }
 
@@ -102,6 +99,6 @@ int		get_next_line(int const fd, char **line)
 		return (-1);
 	else if (ret == 1)
 		return (1);
-	free(tmp_buff);
+	ft_strdel(&tmp_buff);
 	return (0);
 }
