@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/16 14:37:52 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/17 11:30:04 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,17 @@ int		gnl(char **tmp_buff, char **line)
 		i = 0;
 		while ((*tmp_buff)[i] && (*tmp_buff)[i] != '\n')
 			i++;
-		*line = NULL;
-		free(*line);
 		if (!(*line = ft_strsub((*tmp_buff), 0, i)))
 			return (-1);
 		if (!(sub = ft_strsub((*tmp_buff), i + 1, ft_strlen((*tmp_buff)) - i)))
 			return (-1);
 		free((*tmp_buff));
-		*tmp_buff = ft_strdup(sub);
-		if ((*tmp_buff) != NULL)
+		if ((*tmp_buff = ft_strdup(sub)) != NULL)
 		{
 			if (sub[0] == '\0')
 			{
-				(*tmp_buff) = NULL;
 				free(*tmp_buff);
+				(*tmp_buff) = NULL;
 			}
 			free(sub);
 			return (1);
