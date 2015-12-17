@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/17 11:30:04 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/17 13:32:29 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,22 @@ int		gnl(char **tmp_buff, char **line)
 	return (0);
 }
 
+int		gnl_for_norme(char **tmp_buff, char **buff)
+{
+	char			*tmp;
+
+	if (!(tmp = ft_strjoin((*tmp_buff), *buff)))
+		return (-1);
+	free(*tmp_buff);
+	*tmp_buff = ft_strdup(tmp);
+	free(tmp);
+	return (0);
+}
+
 int		gnl_read(int fd, char **tmp_buff)
 {
 	int				len_buff;
 	char			*buff;
-	char			*tmp;
 
 	if (!(buff = ft_strnew(BUFF_SIZE)))
 		return (-1);
@@ -62,11 +73,8 @@ int		gnl_read(int fd, char **tmp_buff)
 		}
 		else
 		{
-			if (!(tmp = ft_strjoin((*tmp_buff), buff)))
+			if (gnl_for_norme(tmp_buff, &buff) == -1)
 				return (-1);
-			free(*tmp_buff);
-			*tmp_buff = ft_strdup(tmp);
-			free(tmp);
 		}
 		free(buff);
 		if (!(buff = ft_strnew(BUFF_SIZE)))
