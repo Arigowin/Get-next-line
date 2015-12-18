@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <stdio.h>
+
 int		gnl(char **tmp_buff, char **line)
 {
 	char			*sub;
@@ -86,37 +88,38 @@ int		get_next_line(int const fd, char **line)
 {
 	//static char		*tmp_buff[1024];
 	static t_file	*tmp_buff;
-	t_file			tmp;
+	t_file			*tmp;
 	int				ret;
 
 	if (tmp_buff == NULL)
 	{
 		tmp_buff = ft_lstfilenew(NULL, fd);
+		tmp = tmp_buff;
 	}
 	else
 	{
 		tmp = tmp_buff;
 		while (tmp != NULL && tmp->fd == fd)
 			tmp = tmp->next;
-		if (tmp == NULL)
+		if (tmp->fd != fd)
 		{
-			tmp = ft_lstfilenew(NULL, fd);
-			ft_lstfileadd(&tmp_buff, tmp);
+			ft_lstfileadd(&tmp_buff, ft_lstfilenew(NULL, fd));
+			tmp = tmp_buff;
 		}
 	}
 
 	if (line == NULL)
 		return (-1);
-	if ((ret = gnl(&tmp_buff[fd], line)) == -1)
+	if ((ret = gnl(&(tmp->data), line)) == -1)
 		return (-1);
 	else if (ret == 1)
 		return (1);
-	if ((gnl_read(fd, &tmp_buff[fd])) == -1)
+	if ((gnl_read(tmp->fd, &(tmp->data))) == -1)
 		return (-1);
-	if ((ret = gnl(&tmp_buff[fd], line)) == -1)
+	if ((ret = gnl(&(tmp->data), line)) == -1)
 		return (-1);
 	else if (ret == 1)
 		return (1);
-	ft_strdel(&tmp_buff[fd]);
+	ft_lstfilefree(&tmp_buff);
 	return (0);
 }
