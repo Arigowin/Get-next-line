@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/29 12:07:14 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/29 13:12:14 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,5 @@ int		get_next_line(int const fd, char **line)
 		return (-1);
 	else if (ret == 1)
 		return (1);
-	//ft_lstfilefree(&tmp);
 	return (0);
 }
