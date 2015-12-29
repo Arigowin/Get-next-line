@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/29 11:52:37 by dolewski         ###   ########.fr       */
+/*   Updated: 2015/12/29 13:12:14 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,21 +86,38 @@ int		gnl_read(int fd, char **tmp_buff)
 
 int		get_next_line(int const fd, char **line)
 {
-	static char		*tmp_buff[256];
+	//static char		*tmp_buff[1024];
+	static t_file	tmp_buff;
+	t_file			*tmp;
 	int				ret;
 
-	if (line == NULL && fd <= 0)
+	if (line == NULL)
 		return (-1);
-	if ((ret = gnl(&(tmp_buff[fd]), line)) == -1)
+	tmp = &tmp_buff;
+	if (tmp->data == NULL && tmp->fd == 0)
+	{
+		tmp_buff.fd = fd;
+		tmp_buff.next = NULL;
+		tmp_buff.data = ft_strnew(1);
+		if ((ret = gnl_read(fd, &(tmp->data))) == -1)
+			return (-1);
+	}
+	while (tmp->fd != fd && tmp->next != NULL)
+		tmp = tmp->next;
+	if (tmp->fd != fd)
+	{
+		if ((tmp->next = (t_file*)malloc(sizeof(t_file))) == NULL)
+			return (-1);
+		tmp->next->fd = fd;
+		tmp->next->next = NULL;
+		tmp->next->data = NULL;
+		if ((ret = gnl_read(fd, &(tmp->next->data))) == -1)
+			return (-1);
+		tmp = tmp->next;
+	}
+	if ((ret = gnl(&(tmp->data), line)) == -1)
 		return (-1);
 	else if (ret == 1)
 		return (1);
-	if ((gnl_read(fd, &(tmp_buff[fd]))) == -1)
-		return (-1);
-	if ((ret = gnl(&(tmp_buff[fd]), line)) == -1)
-		return (-1);
-	else if (ret == 1)
-		return (1);
-	ft_strdel(&(tmp_buff[fd]));
 	return (0);
 }
