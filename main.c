@@ -17,7 +17,7 @@ int main(int ac, char **av)
 
 	ret = get_next_line(fd[0], &line);
 	if (ret == -1)
-		printf("error: fd->%d ret->%d\n", fd[0], ret);
+		printf("error: fd->|%d| ret->|%d|\n", fd[0], ret);
 	printf("%d->%d->%s\n", ret, fd[0], line);
 	free(line);
 	line = NULL;
@@ -40,7 +40,6 @@ int main(int ac, char **av)
 	if (ret == -1)
 		printf("error: fd->%d ret->%d\n", fd[1], ret);
 	printf("%d->%d->%s\n", ret, fd[1], line);
-	free(line);
 	free(line);
 	line = NULL;
 
