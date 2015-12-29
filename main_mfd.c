@@ -13,27 +13,29 @@ int main(int ac, char **av)
 	int i;
 
 	i = 0;
-
-	fd[0] = open(av[1], O_RDONLY);
-	fd[1] = open(av[2], O_RDONLY);
-	fd[2] = open(av[3], O_RDONLY);
-	fd[3] = open(av[4], O_RDONLY);
-	ac = 0;
+	while (i < ac)
+	{
+		fd[i] = open(av[i + 1], O_RDONLY);
+		i++;
+	}
 
 	ret = 1;
+	i = 0;
 	while (ret > 0)
 	{
 		ret = get_next_line(fd[i], &line);
-
-		printf("%d->%d->%s\n", ret, fd[i], line);
+		printf("|%d|->|%d|->|%s|\n", ret, fd[i], line);
 		free(line);
 		line = NULL;
-		i = (i == 1 ? 0 : i + 1);
+		i = (i == (ac - 2) ? 0 : i + 1);
 	}
 
-	close(fd[0]);
-	close(fd[1]);
-	close(fd[2]);
-	close(fd[3]);
+	i = 0;
+	while (i < ac)
+	{
+		close(fd[i]);
+		i++;
+	}
+
 	return (0);
 }
