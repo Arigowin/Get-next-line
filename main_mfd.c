@@ -23,13 +23,12 @@ int main(int ac, char **av)
 	ret = 1;
 	while (ret > 0)
 	{
-		printf("%d\n", i);
 		ret = get_next_line(fd[i], &line);
 
 		printf("%d->%d->%s\n", ret, fd[i], line);
 		free(line);
 		line = NULL;
-		i = (i == 3 ? 0 : i + 1);
+		i = (i == 1 ? 0 : i + 1);
 	}
 
 	close(fd[0]);
