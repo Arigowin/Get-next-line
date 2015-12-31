@@ -18,6 +18,7 @@ int main(int ac, char **av)
 		fd[i] = open(av[i + 1], O_RDONLY);
 		i++;
 	}
+	fd[0] = 0;
 
 	ret = 1;
 	i = 0;
