@@ -18,7 +18,7 @@ int main(int ac, char **av)
 		fd[i] = open(av[i + 1], O_RDONLY);
 		i++;
 	}
-	fd[0] = 0;
+//	fd[0] = 0;
 
 	ret = 1;
 	i = 0;
@@ -26,8 +26,7 @@ int main(int ac, char **av)
 	{
 		ret = get_next_line(fd[i], &line);
 		printf("|%d|->|%d|->|%s|\n", ret, fd[i], line);
-		free(line);
-		line = NULL;
+		ft_strdel(&line);
 		i = (i == (ac - 2) ? 0 : i + 1);
 	}
 
@@ -38,5 +37,6 @@ int main(int ac, char **av)
 		i++;
 	}
 
+//	while (1);
 	return (0);
 }

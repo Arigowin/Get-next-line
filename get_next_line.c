@@ -14,73 +14,60 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <stdio.h>
-
-int		gnl(char **tmp_buff, char **line)
-{
-	char			*sub;
-	int				i;
-
-	if (tmp_buff != NULL && (*tmp_buff) != NULL)
-	{
-		i = 0;
-		while ((*tmp_buff)[i] && (*tmp_buff)[i] != '\n')
-			i++;
-		if (!(*line = ft_strsub((*tmp_buff), 0, i)))
-			return (-1);
-		if (!(sub = ft_strsub((*tmp_buff), i + 1, ft_strlen((*tmp_buff)) - i)))
-			return (-1);
-		ft_strdel(tmp_buff);
-		if ((*tmp_buff = ft_strdup(sub)) != NULL)
-		{
-			if (sub[0] == '\0')
-				ft_strdel(tmp_buff);
-			ft_strdel(&sub);
-			return (1);
-		}
-	}
-	return (0);
-}
-
-int		gnl_for_norme(char **tmp_buff, char **buff)
+int		gnl_join(char **dest, char *src)
 {
 	char			*tmp;
 
-	if ((*tmp_buff) == NULL)
+	if ((*dest) == NULL)
 	{
-		ft_strdel(tmp_buff);
-		if (!((*tmp_buff) = ft_strdup(*buff)))
+		ft_strdel(dest);
+		if (!((*dest) = ft_strdup(src)))
 			return (-1);
 	}
 	else
 	{
-		if (!(tmp = ft_strjoin((*tmp_buff), *buff)))
+		if (!(tmp = ft_strjoin((*dest), src)))
 			return (-1);
-		ft_strdel(tmp_buff);
-		*tmp_buff = ft_strdup(tmp);
+		ft_strdel(dest);
+		*dest = ft_strdup(tmp);
 		ft_strdel(&tmp);
 	}
 	return (0);
 }
 
-int		gnl_read(int fd, char **tmp_buff)
+int		gnl(char **tmp_buff, char **line, char *buff)
+{
+	char			*sub;
+
+	*(ft_strchr(buff, '\n')) = '\0';
+	if (gnl_join(line, buff) == -1)
+		return (-1);
+	if (*tmp_buff == NULL)
+		*tmp_buff = ft_strnew(BUFF_SIZE);
+	if (ft_strcpy(*tmp_buff, buff + ft_strlen(buff) + 1) == NULL)
+		return (-1);
+	return (1);
+}
+
+int		gnl_read(int fd, char **line, char **tmp_buff)
 {
 	int				len_buff;
-	char			*buff;
+	char			buff[BUFF_SIZE];
 
-	if (!(buff = ft_strnew(BUFF_SIZE)))
-		return (-1);
-	ft_bzero(buff, BUFF_SIZE);
-	while ((len_buff = read(fd, buff, BUFF_SIZE)) > 0)
+	if (ft_strchr(*tmp_buff, '\n') != NULL)
+		return (gnl(tmp_buff, line, *tmp_buff));
+	while((len_buff = read(fd, buff, BUFF_SIZE)) > 0)
 	{
-		if (gnl_for_norme(tmp_buff, &buff) == -1)
-			return (-1);
-		ft_strdel(&buff);
-		if (!(buff = ft_strnew(BUFF_SIZE)))
-			return (-1);
+		buff[len_buff] = '\0';
+		if (ft_strchr(buff, '\n') != NULL)
+			return (gnl(tmp_buff, line, buff));
+		else
+		{
+			if (gnl_join(line, buff) == -1)
+				return (-1);
+		}
 		ft_bzero(buff, BUFF_SIZE);
 	}
-	ft_strdel(&buff);
 	return (len_buff);
 }
 
@@ -89,18 +76,22 @@ int		get_next_line(int const fd, char **line)
 	static char		*tmp_buff[256];
 	int				ret;
 
-	if (line == NULL && fd <= 0)
+	if (line == NULL || fd < 0)
 		return (-1);
-	if ((ret = gnl(&(tmp_buff[fd]), line)) == -1)
+	else
+		*line = NULL;
+	if ((ret = gnl_read(fd, line, &(tmp_buff[fd]))) == -1)
 		return (-1);
-	else if (ret == 1)
-		return (1);
-	if ((gnl_read(fd, &(tmp_buff[fd]))) == -1)
-		return (-1);
-	if ((ret = gnl(&(tmp_buff[fd]), line)) == -1)
-		return (-1);
-	else if (ret == 1)
-		return (1);
-	ft_strdel(&(tmp_buff[fd]));
-	return (0);
+	else if (ret == 0)
+	{
+		if (tmp_buff[fd])
+		{
+			*line = ft_strdup(tmp_buff[fd]);
+			ft_strdel(&(tmp_buff[fd]));
+			return (1);
+		}
+		ft_strdel(&(tmp_buff[fd]));
+		return (0);
+	}
+	return (1);
 }

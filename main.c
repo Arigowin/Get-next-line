@@ -20,8 +20,7 @@ int main(int ac, char **av)
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
 		printf("%d->%d->%s\n", ret, fd, line);
-		free(line);
-		line = NULL;
+		ft_strdel(&line);
 	}
 
 	close(fd);
