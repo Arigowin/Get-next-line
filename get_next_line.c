@@ -14,19 +14,21 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <stdio.h>
+
 int		gnl_join(char **dest, char *src)
 {
 	char			*tmp;
 
-	if ((*dest) == NULL)
+	if (*dest == NULL)
 	{
 		ft_strdel(dest);
-		if (!((*dest) = ft_strdup(src)))
+		if (!(*dest = ft_strdup(src)))
 			return (-1);
 	}
 	else
 	{
-		if (!(tmp = ft_strjoin((*dest), src)))
+		if (!(tmp = ft_strjoin(*dest, src)))
 			return (-1);
 		ft_strdel(dest);
 		*dest = ft_strdup(tmp);
@@ -35,37 +37,39 @@ int		gnl_join(char **dest, char *src)
 	return (0);
 }
 
-int		gnl(char **tmp_buff, char **line, char *buff)
+int		gnl(char **tmp_buff, char **line)
 {
-	char			*sub;
+	int i;
+	char *tmp;
 
-	*(ft_strchr(buff, '\n')) = '\0';
-	if (gnl_join(line, buff) == -1)
+	i = 0;
+	while ((*tmp_buff)[i] != '\n')
+		i++;
+	(*tmp_buff)[i] = '\0';
+	if (gnl_join(line, *tmp_buff) == -1)
 		return (-1);
-	if (*tmp_buff == NULL)
-		*tmp_buff = ft_strnew(BUFF_SIZE);
-	if (ft_strcpy(*tmp_buff, buff + ft_strlen(buff) + 1) == NULL)
-		return (-1);
+	(*tmp_buff)[i] = '\n';
+	tmp = ft_strsub(*tmp_buff, i + 1, ft_strlen(*tmp_buff));
+	ft_strdel(tmp_buff);
+	*tmp_buff = ft_strdup(tmp);
+	free(tmp);
 	return (1);
 }
 
 int		gnl_read(int fd, char **line, char **tmp_buff)
 {
 	int				len_buff;
-	char			buff[BUFF_SIZE];
+	char			buff[BUFF_SIZE + 1];
 
 	if (ft_strchr(*tmp_buff, '\n') != NULL)
-		return (gnl(tmp_buff, line, *tmp_buff));
+		return (gnl(tmp_buff, line));
 	while((len_buff = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[len_buff] = '\0';
-		if (ft_strchr(buff, '\n') != NULL)
-			return (gnl(tmp_buff, line, buff));
-		else
-		{
-			if (gnl_join(line, buff) == -1)
-				return (-1);
-		}
+		if (gnl_join(tmp_buff, buff) == -1)
+			return (-1);
+		if (ft_strchr(*tmp_buff, '\n') != NULL)
+			return (gnl(tmp_buff, line));
 		ft_bzero(buff, BUFF_SIZE);
 	}
 	return (len_buff);
@@ -84,12 +88,14 @@ int		get_next_line(int const fd, char **line)
 		return (-1);
 	else if (ret == 0)
 	{
-		if (tmp_buff[fd])
+		if (tmp_buff[fd] && tmp_buff[fd][0])
 		{
 			*line = ft_strdup(tmp_buff[fd]);
 			ft_strdel(&(tmp_buff[fd]));
 			return (1);
 		}
+		else if (*line)
+			return (1);
 		ft_strdel(&(tmp_buff[fd]));
 		return (0);
 	}

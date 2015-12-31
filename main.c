@@ -22,6 +22,7 @@ int main(int ac, char **av)
 		printf("%d->%d->%s\n", ret, fd, line);
 		ft_strdel(&line);
 	}
+	printf("ret:|%d|\tline:|%s|\n", ret, line);
 
 	close(fd);
 	return (0);

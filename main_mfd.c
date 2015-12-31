@@ -30,6 +30,8 @@ int main(int ac, char **av)
 		i = (i == (ac - 2) ? 0 : i + 1);
 	}
 
+	printf("ret:|%d|\tline:|%s|\n", ret, line);
+
 	i = 0;
 	while (i < ac)
 	{
