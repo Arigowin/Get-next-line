@@ -16,7 +16,9 @@ int main(int ac, char **av)
 
 	fd = open(av[1], O_RDONLY);
 	ac = 0;
+	fd = 42;
 
+	printf("|%d|\t|%s|\n", get_next_line(42, &line), line);
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
 		printf("%d->%d->%s\n", ret, fd, line);

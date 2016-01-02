@@ -13,7 +13,7 @@ int main(int ac, char **av)
 	int i;
 
 	i = 0;
-	while (i < ac)
+	while (i < ac - 1)
 	{
 		fd[i] = open(av[i + 1], O_RDONLY);
 		i++;
@@ -33,7 +33,7 @@ int main(int ac, char **av)
 	printf("ret:|%d|\tline:|%s|\n", ret, line);
 
 	i = 0;
-	while (i < ac)
+	while (i < ac - 1)
 	{
 		close(fd[i]);
 		i++;

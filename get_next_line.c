@@ -31,7 +31,8 @@ int		gnl_join(char **dest, char *src)
 		if (!(tmp = ft_strjoin(*dest, src)))
 			return (-1);
 		ft_strdel(dest);
-		*dest = ft_strdup(tmp);
+		if ((*dest = ft_strdup(tmp)) == NULL)
+			return (-1);
 		ft_strdel(&tmp);
 	}
 	return (0);
@@ -49,9 +50,11 @@ int		gnl(char **tmp_buff, char **line)
 	if (gnl_join(line, *tmp_buff) == -1)
 		return (-1);
 	(*tmp_buff)[i] = '\n';
-	tmp = ft_strsub(*tmp_buff, i + 1, ft_strlen(*tmp_buff));
+	if ((tmp = ft_strsub(*tmp_buff, i + 1, ft_strlen(*tmp_buff))) == NULL)
+		return (-1);
 	ft_strdel(tmp_buff);
-	*tmp_buff = ft_strdup(tmp);
+	if (gnl_join(tmp_buff, tmp) == -1)
+		return (-1);
 	free(tmp);
 	return (1);
 }
@@ -90,7 +93,8 @@ int		get_next_line(int const fd, char **line)
 	{
 		if (tmp_buff[fd] && tmp_buff[fd][0])
 		{
-			*line = ft_strdup(tmp_buff[fd]);
+			if ((*line = ft_strdup(tmp_buff[fd])) == NULL)
+				return (-1);
 			ft_strdel(&(tmp_buff[fd]));
 			return (1);
 		}
