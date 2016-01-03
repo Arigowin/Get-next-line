@@ -6,15 +6,13 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2016/01/03 10:01:44 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/01/03 10:11:12 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <unistd.h>
-
-#include <stdio.h>
 
 int		gnl(char **tmp_buff, char **line)
 {

@@ -6,15 +6,13 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2016/01/03 10:01:28 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/01/03 10:10:49 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <unistd.h>
-
-#include <stdio.h>
 
 int		gnl_join(char **dest, char *src)
 {

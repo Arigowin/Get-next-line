@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:01:22 by dolewski          #+#    #+#             */
-/*   Updated: 2016/01/03 09:57:26 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/01/03 10:11:02 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft.h"
 
-# define BUFF_SIZE 1
+# define BUFF_SIZE 512
 
 int					get_next_line(const int fd, char **line);
 
