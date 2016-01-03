@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/29 11:52:37 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/01/03 10:01:28 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int		gnl_join(char **dest, char *src)
 
 int		gnl(char **tmp_buff, char **line)
 {
-	int i;
-	char *tmp;
+	int		i;
+	char	*tmp;
 
 	i = 0;
 	while ((*tmp_buff)[i] != '\n')
@@ -66,7 +66,7 @@ int		gnl_read(int fd, char **line, char **tmp_buff)
 
 	if (ft_strchr(*tmp_buff, '\n') != NULL)
 		return (gnl(tmp_buff, line));
-	while((len_buff = read(fd, buff, BUFF_SIZE)) > 0)
+	while ((len_buff = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[len_buff] = '\0';
 		if (gnl_join(tmp_buff, buff) == -1)
