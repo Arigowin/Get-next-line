@@ -16,6 +16,7 @@ int main(int ac, char **av)
 
 	fd = open(av[1], O_RDONLY);
 	ac = 0;
+//	fd = 0;
 
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
