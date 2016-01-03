@@ -19,7 +19,7 @@ int main(int ac, char **av)
 
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		printf("%d->%d->%s\n", ret, fd, line);
+		printf("|%d|->|%d|\t|%s|\n", ret, fd, line);
 		ft_strdel(&line);
 	}
 	printf("ret:|%d|\tline:|%s|\n", ret, line);

@@ -25,7 +25,7 @@ int main(int ac, char **av)
 	while (ret > 0)
 	{
 		ret = get_next_line(fd[i], &line);
-		printf("|%d|->|%d|->|%s|\n", ret, fd[i], line);
+		printf("|%d|->|%d|\t|%s|\n", ret, fd[i], line);
 		ft_strdel(&line);
 		i = (i == (ac - 2) ? 0 : i + 1);
 	}
