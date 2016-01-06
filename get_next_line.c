@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2016/01/03 10:10:49 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/01/06 17:09:34 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int		get_next_line(int const fd, char **line)
 	static char		*tmp_buff[256];
 	int				ret;
 
-	if (line == NULL || fd < 0)
+	if (line == NULL || fd < 0 || fd > 255)
 		return (-1);
 	else
 		*line = NULL;
