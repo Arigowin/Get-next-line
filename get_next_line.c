@@ -6,13 +6,14 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 13:16:05 by dolewski          #+#    #+#             */
-/*   Updated: 2016/01/06 17:09:34 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/01/07 13:36:26 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <unistd.h>
+#include <limits.h>
 
 int		gnl_join(char **dest, char *src)
 {
@@ -78,10 +79,10 @@ int		gnl_read(int fd, char **line, char **tmp_buff)
 
 int		get_next_line(int const fd, char **line)
 {
-	static char		*tmp_buff[256];
+	static char		*tmp_buff[INT_MAX];
 	int				ret;
 
-	if (line == NULL || fd < 0 || fd > 255)
+	if (line == NULL || fd < 0)
 		return (-1);
 	else
 		*line = NULL;
